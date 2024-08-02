@@ -3,7 +3,7 @@ import "./App.css";
 function App() {
   return (
     <>
-      <p>test</p>
+      <p>test2 입니다.</p>
     </>
   );
 }
