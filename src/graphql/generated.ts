@@ -24,6 +24,19 @@ export type GetAllLocationOutput = {
   ok: Scalars['Boolean']['output'];
 };
 
+export type GetLocationInput = {
+  placeNumber: Scalars['Int']['input'];
+};
+
+export type GetLocationOutput = {
+  __typename?: 'GetLocationOutput';
+  error?: Maybe<Scalars['String']['output']>;
+  ok: Scalars['Boolean']['output'];
+  placeName?: Maybe<Scalars['String']['output']>;
+  placeNumber?: Maybe<Scalars['Int']['output']>;
+  placeVisitorCount?: Maybe<Scalars['Int']['output']>;
+};
+
 export type Location = {
   __typename?: 'Location';
   placeName: Scalars['String']['output'];
@@ -33,10 +46,21 @@ export type Location = {
 
 export type Query = {
   __typename?: 'Query';
-  bye: Scalars['String']['output'];
   getAllLocation: GetAllLocationOutput;
-  hello: Scalars['String']['output'];
+  getLocation: GetLocationOutput;
 };
+
+
+export type QueryGetLocationArgs = {
+  input: GetLocationInput;
+};
+
+export type GetLocationQueryVariables = Exact<{
+  input: GetLocationInput;
+}>;
+
+
+export type GetLocationQuery = { __typename?: 'Query', getLocation: { __typename?: 'GetLocationOutput', ok: boolean, error?: string | null, placeName?: string | null, placeNumber?: number | null, placeVisitorCount?: number | null } };
 
 export type GetLocationsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -44,6 +68,50 @@ export type GetLocationsQueryVariables = Exact<{ [key: string]: never; }>;
 export type GetLocationsQuery = { __typename?: 'Query', getAllLocation: { __typename?: 'GetAllLocationOutput', ok: boolean, locations?: Array<{ __typename?: 'Location', placeName: string, placeNumber: number, placeVisitorCount: number }> | null } };
 
 
+export const GetLocationDocument = gql`
+    query GetLocation($input: GetLocationInput!) {
+  getLocation(input: $input) {
+    ok
+    error
+    placeName
+    placeNumber
+    placeVisitorCount
+  }
+}
+    `;
+
+/**
+ * __useGetLocationQuery__
+ *
+ * To run a query within a React component, call `useGetLocationQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetLocationQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetLocationQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useGetLocationQuery(baseOptions: Apollo.QueryHookOptions<GetLocationQuery, GetLocationQueryVariables> & ({ variables: GetLocationQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetLocationQuery, GetLocationQueryVariables>(GetLocationDocument, options);
+      }
+export function useGetLocationLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetLocationQuery, GetLocationQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetLocationQuery, GetLocationQueryVariables>(GetLocationDocument, options);
+        }
+export function useGetLocationSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetLocationQuery, GetLocationQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetLocationQuery, GetLocationQueryVariables>(GetLocationDocument, options);
+        }
+export type GetLocationQueryHookResult = ReturnType<typeof useGetLocationQuery>;
+export type GetLocationLazyQueryHookResult = ReturnType<typeof useGetLocationLazyQuery>;
+export type GetLocationSuspenseQueryHookResult = ReturnType<typeof useGetLocationSuspenseQuery>;
+export type GetLocationQueryResult = Apollo.QueryResult<GetLocationQuery, GetLocationQueryVariables>;
 export const GetLocationsDocument = gql`
     query GetLocations {
   getAllLocation {

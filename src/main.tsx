@@ -6,6 +6,8 @@ import { RouterProvider } from "react-router-dom";
 import { ApolloProvider } from "@apollo/client";
 import { client } from "./apollo.ts";
 
+import "./styles/global.css";
+
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 
 root.render(
