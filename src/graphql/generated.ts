@@ -29,6 +29,16 @@ export type CreateLocationOutput = {
   ok: Scalars['Boolean']['output'];
 };
 
+export type DeleteLocationInput = {
+  placeNumber: Scalars['Int']['input'];
+};
+
+export type DeleteLocationOutput = {
+  __typename?: 'DeleteLocationOutput';
+  error?: Maybe<Scalars['String']['output']>;
+  ok: Scalars['Boolean']['output'];
+};
+
 export type GetAllLocationOutput = {
   __typename?: 'GetAllLocationOutput';
   error?: Maybe<Scalars['String']['output']>;
@@ -59,11 +69,23 @@ export type Location = {
 export type Mutation = {
   __typename?: 'Mutation';
   createLocation: CreateLocationOutput;
+  deleteLocation: DeleteLocationOutput;
+  updateLocationVisitorCount: UpdateLocationVisitorCountOutput;
 };
 
 
 export type MutationCreateLocationArgs = {
   input: CreateLocationInput;
+};
+
+
+export type MutationDeleteLocationArgs = {
+  input: DeleteLocationInput;
+};
+
+
+export type MutationUpdateLocationVisitorCountArgs = {
+  input: UpdateLocationVisitorCountInput;
 };
 
 export type Query = {
@@ -77,12 +99,37 @@ export type QueryGetLocationArgs = {
   input: GetLocationInput;
 };
 
+export type UpdateLocationVisitorCountInput = {
+  placeNumber: Scalars['Int']['input'];
+  value: Scalars['Int']['input'];
+};
+
+export type UpdateLocationVisitorCountOutput = {
+  __typename?: 'UpdateLocationVisitorCountOutput';
+  error?: Maybe<Scalars['String']['output']>;
+  ok: Scalars['Boolean']['output'];
+};
+
 export type CreateLocationMutationVariables = Exact<{
-  CreateLocationInput: CreateLocationInput;
+  input: CreateLocationInput;
 }>;
 
 
 export type CreateLocationMutation = { __typename?: 'Mutation', createLocation: { __typename?: 'CreateLocationOutput', ok: boolean, error?: string | null } };
+
+export type DeleteLocationMutationVariables = Exact<{
+  input: DeleteLocationInput;
+}>;
+
+
+export type DeleteLocationMutation = { __typename?: 'Mutation', deleteLocation: { __typename?: 'DeleteLocationOutput', ok: boolean, error?: string | null } };
+
+export type UpdateLocationVisitorCountMutationVariables = Exact<{
+  input: UpdateLocationVisitorCountInput;
+}>;
+
+
+export type UpdateLocationVisitorCountMutation = { __typename?: 'Mutation', updateLocationVisitorCount: { __typename?: 'UpdateLocationVisitorCountOutput', ok: boolean, error?: string | null } };
 
 export type GetLocationQueryVariables = Exact<{
   input: GetLocationInput;
@@ -98,8 +145,8 @@ export type GetLocationsQuery = { __typename?: 'Query', getAllLocation: { __type
 
 
 export const CreateLocationDocument = gql`
-    mutation CreateLocation($CreateLocationInput: CreateLocationInput!) {
-  createLocation(input: $CreateLocationInput) {
+    mutation CreateLocation($input: CreateLocationInput!) {
+  createLocation(input: $input) {
     ok
     error
   }
@@ -120,7 +167,7 @@ export type CreateLocationMutationFn = Apollo.MutationFunction<CreateLocationMut
  * @example
  * const [createLocationMutation, { data, loading, error }] = useCreateLocationMutation({
  *   variables: {
- *      CreateLocationInput: // value for 'CreateLocationInput'
+ *      input: // value for 'input'
  *   },
  * });
  */
@@ -131,6 +178,74 @@ export function useCreateLocationMutation(baseOptions?: Apollo.MutationHookOptio
 export type CreateLocationMutationHookResult = ReturnType<typeof useCreateLocationMutation>;
 export type CreateLocationMutationResult = Apollo.MutationResult<CreateLocationMutation>;
 export type CreateLocationMutationOptions = Apollo.BaseMutationOptions<CreateLocationMutation, CreateLocationMutationVariables>;
+export const DeleteLocationDocument = gql`
+    mutation DeleteLocation($input: DeleteLocationInput!) {
+  deleteLocation(input: $input) {
+    ok
+    error
+  }
+}
+    `;
+export type DeleteLocationMutationFn = Apollo.MutationFunction<DeleteLocationMutation, DeleteLocationMutationVariables>;
+
+/**
+ * __useDeleteLocationMutation__
+ *
+ * To run a mutation, you first call `useDeleteLocationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteLocationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteLocationMutation, { data, loading, error }] = useDeleteLocationMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useDeleteLocationMutation(baseOptions?: Apollo.MutationHookOptions<DeleteLocationMutation, DeleteLocationMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteLocationMutation, DeleteLocationMutationVariables>(DeleteLocationDocument, options);
+      }
+export type DeleteLocationMutationHookResult = ReturnType<typeof useDeleteLocationMutation>;
+export type DeleteLocationMutationResult = Apollo.MutationResult<DeleteLocationMutation>;
+export type DeleteLocationMutationOptions = Apollo.BaseMutationOptions<DeleteLocationMutation, DeleteLocationMutationVariables>;
+export const UpdateLocationVisitorCountDocument = gql`
+    mutation UpdateLocationVisitorCount($input: UpdateLocationVisitorCountInput!) {
+  updateLocationVisitorCount(input: $input) {
+    ok
+    error
+  }
+}
+    `;
+export type UpdateLocationVisitorCountMutationFn = Apollo.MutationFunction<UpdateLocationVisitorCountMutation, UpdateLocationVisitorCountMutationVariables>;
+
+/**
+ * __useUpdateLocationVisitorCountMutation__
+ *
+ * To run a mutation, you first call `useUpdateLocationVisitorCountMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateLocationVisitorCountMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateLocationVisitorCountMutation, { data, loading, error }] = useUpdateLocationVisitorCountMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateLocationVisitorCountMutation(baseOptions?: Apollo.MutationHookOptions<UpdateLocationVisitorCountMutation, UpdateLocationVisitorCountMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateLocationVisitorCountMutation, UpdateLocationVisitorCountMutationVariables>(UpdateLocationVisitorCountDocument, options);
+      }
+export type UpdateLocationVisitorCountMutationHookResult = ReturnType<typeof useUpdateLocationVisitorCountMutation>;
+export type UpdateLocationVisitorCountMutationResult = Apollo.MutationResult<UpdateLocationVisitorCountMutation>;
+export type UpdateLocationVisitorCountMutationOptions = Apollo.BaseMutationOptions<UpdateLocationVisitorCountMutation, UpdateLocationVisitorCountMutationVariables>;
 export const GetLocationDocument = gql`
     query GetLocation($input: GetLocationInput!) {
   getLocation(input: $input) {
