@@ -17,6 +17,18 @@ export type Scalars = {
   Float: { input: number; output: number; }
 };
 
+export type CreateLocationInput = {
+  placeName: Scalars['String']['input'];
+  placeNumber?: InputMaybe<Scalars['Int']['input']>;
+  placeVisitorCount: Scalars['Int']['input'];
+};
+
+export type CreateLocationOutput = {
+  __typename?: 'CreateLocationOutput';
+  error?: Maybe<Scalars['String']['output']>;
+  ok: Scalars['Boolean']['output'];
+};
+
 export type GetAllLocationOutput = {
   __typename?: 'GetAllLocationOutput';
   error?: Maybe<Scalars['String']['output']>;
@@ -44,6 +56,16 @@ export type Location = {
   placeVisitorCount: Scalars['Int']['output'];
 };
 
+export type Mutation = {
+  __typename?: 'Mutation';
+  createLocation: CreateLocationOutput;
+};
+
+
+export type MutationCreateLocationArgs = {
+  input: CreateLocationInput;
+};
+
 export type Query = {
   __typename?: 'Query';
   getAllLocation: GetAllLocationOutput;
@@ -54,6 +76,13 @@ export type Query = {
 export type QueryGetLocationArgs = {
   input: GetLocationInput;
 };
+
+export type CreateLocationMutationVariables = Exact<{
+  CreateLocationInput: CreateLocationInput;
+}>;
+
+
+export type CreateLocationMutation = { __typename?: 'Mutation', createLocation: { __typename?: 'CreateLocationOutput', ok: boolean, error?: string | null } };
 
 export type GetLocationQueryVariables = Exact<{
   input: GetLocationInput;
@@ -68,6 +97,40 @@ export type GetLocationsQueryVariables = Exact<{ [key: string]: never; }>;
 export type GetLocationsQuery = { __typename?: 'Query', getAllLocation: { __typename?: 'GetAllLocationOutput', ok: boolean, locations?: Array<{ __typename?: 'Location', placeName: string, placeNumber: number, placeVisitorCount: number }> | null } };
 
 
+export const CreateLocationDocument = gql`
+    mutation CreateLocation($CreateLocationInput: CreateLocationInput!) {
+  createLocation(input: $CreateLocationInput) {
+    ok
+    error
+  }
+}
+    `;
+export type CreateLocationMutationFn = Apollo.MutationFunction<CreateLocationMutation, CreateLocationMutationVariables>;
+
+/**
+ * __useCreateLocationMutation__
+ *
+ * To run a mutation, you first call `useCreateLocationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateLocationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createLocationMutation, { data, loading, error }] = useCreateLocationMutation({
+ *   variables: {
+ *      CreateLocationInput: // value for 'CreateLocationInput'
+ *   },
+ * });
+ */
+export function useCreateLocationMutation(baseOptions?: Apollo.MutationHookOptions<CreateLocationMutation, CreateLocationMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateLocationMutation, CreateLocationMutationVariables>(CreateLocationDocument, options);
+      }
+export type CreateLocationMutationHookResult = ReturnType<typeof useCreateLocationMutation>;
+export type CreateLocationMutationResult = Apollo.MutationResult<CreateLocationMutation>;
+export type CreateLocationMutationOptions = Apollo.BaseMutationOptions<CreateLocationMutation, CreateLocationMutationVariables>;
 export const GetLocationDocument = gql`
     query GetLocation($input: GetLocationInput!) {
   getLocation(input: $input) {
