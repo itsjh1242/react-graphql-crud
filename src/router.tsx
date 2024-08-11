@@ -1,5 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
-import { DatePicker, Dialog, Home, Test, Toast } from "./routes";
+import { DatePicker, DayzenHome, Dialog, Home, Test, Toast } from "./routes";
 import { Root } from "./components";
 
 const router = createBrowserRouter([
@@ -12,6 +12,8 @@ const router = createBrowserRouter([
       { path: "toast", element: <Toast /> },
       { path: "dialog", element: <Dialog /> },
       { path: "date-picker", element: <DatePicker /> },
+      // dayzen
+      { path: "/dayzen", element: <DayzenHome /> },
     ],
   },
 ]);
