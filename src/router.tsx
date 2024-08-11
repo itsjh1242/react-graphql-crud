@@ -1,5 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
-import { DatePicker, Dialog, Home, Test, Toast } from "./routes";
+import { DatePicker, Dialog, Home, Login, Test, Toast } from "./routes";
 import { Root } from "./components";
 
 const router = createBrowserRouter([
@@ -8,6 +8,7 @@ const router = createBrowserRouter([
     element: <Root />,
     children: [
       { path: "", element: <Home /> },
+      { path: "login", element: <Login /> },
       { path: "test", element: <Test /> },
       { path: "toast", element: <Toast /> },
       { path: "dialog", element: <Dialog /> },
