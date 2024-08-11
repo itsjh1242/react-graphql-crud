@@ -8,6 +8,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { TabsContent } from "@radix-ui/react-tabs";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+// gql
+import { useLoginMutation } from "@/graphql/generated";
+import { setToken } from "@/lib/token-helper";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+import { Separator } from "@/components/ui/separator";
 
 // login form schema
 const loginFormSchema = z.object({
@@ -24,6 +30,12 @@ const registerFormSchema = z.object({
 });
 
 export const Login = () => {
+  // gql
+  const [loginGql] = useLoginMutation();
+
+  // tool
+  const navigate = useNavigate();
+
   // login form init
   const loginForm = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
@@ -47,6 +59,24 @@ export const Login = () => {
   const onLoginSubmit = async (values: z.infer<typeof loginFormSchema>) => {
     try {
       console.log(values);
+      const res = await loginGql({
+        variables: {
+          input: {
+            id: values.id,
+            password: values.password,
+          },
+        },
+      });
+
+      const { ok, token, error } = res.data?.login || {};
+
+      if (ok && token) {
+        setToken(token);
+        navigate("/");
+      } else {
+        toast.error("아이디 또는 비밀번호를 확인해주세요.", { richColors: true });
+        console.log("Login Error with, ", error);
+      }
     } catch (e) {
       console.error(e);
     }
@@ -61,7 +91,7 @@ export const Login = () => {
   };
 
   return (
-    <div className="w-screen h-screen flex justify-center items-center px-4">
+    <div className="flex justify-center mt-10">
       <Tabs defaultValue="login" className="w-[400px]">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="login">로그인</TabsTrigger>
@@ -71,7 +101,7 @@ export const Login = () => {
           <Card>
             <CardHeader>
               <CardTitle>로그인</CardTitle>
-              <CardDescription>여기서 로그인하세요.</CardDescription>
+              <CardDescription className="tracking-tighter">dayzen에 오신 것을 환영합니다</CardDescription>
             </CardHeader>
             <Form {...loginForm}>
               <form onSubmit={loginForm.handleSubmit(onLoginSubmit)}>
@@ -113,12 +143,30 @@ export const Login = () => {
               </form>
             </Form>
           </Card>
+          <div className="flex justify-center items-center max-w-[400px] overflow-hidden my-4">
+            <Separator className="my-4" />
+            <p className="flex-shrink-0 px-4 text-gray-400">또는</p>
+            <Separator className="my-4" />
+          </div>
+          <div className="flex flex-col gap-2 ">
+            <div className="flex justify-center items-center rounded-lg w-[400px] border px-4 py-3 hover:bg-[#ffeb00] cursor-pointer transition-all duration-300">
+              <p className="text-sm">카카오로 로그인하기</p>
+            </div>
+            <div className="flex justify-center items-center rounded-lg w-[400px] border px-4 py-3 hover:bg-[#03c75b] cursor-pointer hover:text-white transition-all duration-300">
+              <p className="text-sm">네이버로 로그인하기</p>
+            </div>
+            <div className="flex justify-center items-center mt-4">
+              <p className="text-sm text-gray-400">
+                비밀번호를 잊으셨나요? <span className="text-black underline cursor-pointer">비밀번호 재설정</span>
+              </p>
+            </div>
+          </div>
         </TabsContent>
         <TabsContent value="register" className="mt-2">
           <Card>
             <CardHeader>
               <CardTitle>회원가입</CardTitle>
-              <CardDescription>여기서 가입하세요.</CardDescription>
+              <CardDescription>dayzen에 오신 것을 환영합니다</CardDescription>
             </CardHeader>
             <Form {...registerForm}>
               <form onSubmit={registerForm.handleSubmit(onRegisterSubmit)}>
@@ -160,9 +208,9 @@ export const Login = () => {
                   render={({ field }) => (
                     <CardContent className="space-y-2">
                       <FormItem>
-                        <FormLabel>성함</FormLabel>
+                        <FormLabel>이름</FormLabel>
                         <FormControl>
-                          <Input placeholder="사용자 성함" {...field} />
+                          <Input placeholder="사용자 이름" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>

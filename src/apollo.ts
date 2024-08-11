@@ -5,11 +5,12 @@ import { getMainDefinition } from "@apollo/client/utilities";
 import { isLoggedInVar, authTokenVar } from "./lib/reactiveVars";
 
 const httpLink = createHttpLink({
-  uri: process.env.NODE_ENV === "production" ? "https://api.dayzen.me:9000/graphql" : "",
+  // uri: process.env.NODE_ENV === "production" ? "https://api.dayzen.me:9000/graphql" : "https://localhost:9000/graphql",
+  uri: "https://api.dayzen.me:9000/graphql",
 });
 
 const wsLink = new WebSocketLink({
-  uri: process.env.NODE_ENV === "production" ? "wss://api.dayzen.me:9000/graphql" : "",
+  uri: process.env.NODE_ENV === "production" ? "wss://api.dayzen.me:9000/graphql" : "wss://localhost:9000/graphql",
   options: {
     reconnect: true,
     connectionParams: {

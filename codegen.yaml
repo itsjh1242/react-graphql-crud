@@ -1,5 +1,5 @@
 overwrite: true
-schema: "http://localhost:9000/graphql"
+schema: "https://api.dayzen.me:9000/graphql"
 documents: "./src/**/*.{tsx,ts}"
 generates:
   ./src/graphql/generated.ts:

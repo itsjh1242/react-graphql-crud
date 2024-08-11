@@ -4,9 +4,9 @@ import { Header } from "./header";
 export const Root = () => {
   return (
     <div className="flex justify-center">
-      <div className="w-full max-w-max min-h-screen">
+      <div className="flex flex-col w-full max-w-max min-h-screen">
         <Header />
-        <div className="flex-grow px-24">
+        <div className="flex-grow">
           <Outlet />
         </div>
       </div>
