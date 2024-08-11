@@ -1,240 +1,142 @@
-import {
-  Cloud,
-  CreditCard,
-  Github,
-  Keyboard,
-  LifeBuoy,
-  LogOut,
-  Mail,
-  Menu,
-  MessageSquare,
-  Plus,
-  PlusCircle,
-  Settings,
-  User,
-  UserPlus,
-  Users,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { BookOpenText, CakeSlice, CalendarDays, ChartNoAxesCombined, Cloud, House, LayoutGrid, LogOut, Menu, Star } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuPortal,
   DropdownMenuSeparator,
   DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { CustomAvatar } from "./custom-avatar";
-import { removeToken, setToken } from "@/lib/token-helper";
-import { redirect, useNavigate } from "react-router-dom";
+import { removeToken } from "@/lib/token-helper";
+import { useNavigate } from "react-router-dom";
+import { GetUserProfileQuery, UserRole } from "@/graphql/generated";
+import { Badge } from "./ui/badge";
 
 export const CustomDropdown = () => {
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="outline">Open</Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56">
-        <DropdownMenuLabel>My Account</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <User className="mr-2 h-4 w-4" />
-            <span>Profile</span>
-            <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <CreditCard className="mr-2 h-4 w-4" />
-            <span>Billing</span>
-            <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <Settings className="mr-2 h-4 w-4" />
-            <span>Settings</span>
-            <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <Keyboard className="mr-2 h-4 w-4" />
-            <span>Keyboard shortcuts</span>
-            <DropdownMenuShortcut>⌘K</DropdownMenuShortcut>
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <Users className="mr-2 h-4 w-4" />
-            <span>Team</span>
-          </DropdownMenuItem>
-          <DropdownMenuSub>
-            <DropdownMenuSubTrigger>
-              <UserPlus className="mr-2 h-4 w-4" />
-              <span>Invite users</span>
-            </DropdownMenuSubTrigger>
-            <DropdownMenuPortal>
-              <DropdownMenuSubContent>
-                <DropdownMenuItem>
-                  <Mail className="mr-2 h-4 w-4" />
-                  <span>Email</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <MessageSquare className="mr-2 h-4 w-4" />
-                  <span>Message</span>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <PlusCircle className="mr-2 h-4 w-4" />
-                  <span>More...</span>
-                </DropdownMenuItem>
-              </DropdownMenuSubContent>
-            </DropdownMenuPortal>
-          </DropdownMenuSub>
-          <DropdownMenuItem>
-            <Plus className="mr-2 h-4 w-4" />
-            <span>New Team</span>
-            <DropdownMenuShortcut>⌘+T</DropdownMenuShortcut>
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          <Github className="mr-2 h-4 w-4" />
-          <span>GitHub</span>
-        </DropdownMenuItem>
-        <DropdownMenuItem>
-          <LifeBuoy className="mr-2 h-4 w-4" />
-          <span>Support</span>
-        </DropdownMenuItem>
-        <DropdownMenuItem disabled>
-          <Cloud className="mr-2 h-4 w-4" />
-          <span>API</span>
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          <LogOut className="mr-2 h-4 w-4" />
-          <span>Log out</span>
-          <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
-  );
+  return <div></div>;
 };
 
 interface CustomHeaderCustomDropdownProps {
   isLogin: boolean;
+  userData: GetUserProfileQuery | undefined;
 }
 
-export const HeaderCustomDropdown: React.FC<CustomHeaderCustomDropdownProps> = ({ isLogin }) => {
+const roleSwitcher = (role: UserRole | undefined) => {
+  switch (role) {
+    case "Manager":
+      return "매니저";
+    case "Client":
+      return "게스트";
+    case "Host":
+      return "호스트";
+    default:
+      return "";
+  }
+};
+
+export const HeaderCustomDropdown: React.FC<CustomHeaderCustomDropdownProps> = ({ isLogin, userData }) => {
   const navigate = useNavigate();
 
+  // user
+  const user = {
+    user_name: userData?.me.name,
+    user_role: roleSwitcher(userData?.me.role),
+    user_profile_url: userData?.me.profileUrl,
+  };
+
   const handleLogin = () => {
-    setToken("test-token");
     navigate("/login");
   };
 
   const handleLogout = () => {
     removeToken();
+    navigate("/dayzen");
+    window.location.reload();
   };
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <div className="flex justify-center items-center border rounded-full px-4 py-2 gap-4 cursor-pointer">
-          <CustomAvatar />
+          <CustomAvatar imageUrl={user.user_profile_url} />
           <Menu />
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
-        <DropdownMenuLabel>{isLogin ? "ㅇㅇ" : "Dayzen 로그인하기"}</DropdownMenuLabel>
+        <DropdownMenuLabel>
+          {isLogin ? (
+            <div className="flex gap-2 w-full">
+              <p className="w-2/3 truncate">{user.user_name}</p>
+              <Badge>
+                <p className="text-white">{user.user_role}</p>
+              </Badge>
+            </div>
+          ) : (
+            "Dayzen 로그인하기"
+          )}
+        </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <User className="mr-2 h-4 w-4" />
-            <span>Profile</span>
-            <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+        {!isLogin && (
+          <DropdownMenuItem
+            onClick={() => {
+              handleLogin();
+            }}
+          >
+            <Cloud className="mr-2 h-4 w-4" />
+            <span>로그인</span>
           </DropdownMenuItem>
-          <DropdownMenuItem>
-            <CreditCard className="mr-2 h-4 w-4" />
-            <span>Billing</span>
-            <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <Settings className="mr-2 h-4 w-4" />
-            <span>Settings</span>
-            <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <Keyboard className="mr-2 h-4 w-4" />
-            <span>Keyboard shortcuts</span>
-            <DropdownMenuShortcut>⌘K</DropdownMenuShortcut>
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <Users className="mr-2 h-4 w-4" />
-            <span>Team</span>
-          </DropdownMenuItem>
-          <DropdownMenuSub>
-            <DropdownMenuSubTrigger>
-              <UserPlus className="mr-2 h-4 w-4" />
-              <span>Invite users</span>
-            </DropdownMenuSubTrigger>
-            <DropdownMenuPortal>
-              <DropdownMenuSubContent>
-                <DropdownMenuItem>
-                  <Mail className="mr-2 h-4 w-4" />
-                  <span>Email</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <MessageSquare className="mr-2 h-4 w-4" />
-                  <span>Message</span>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <PlusCircle className="mr-2 h-4 w-4" />
-                  <span>More...</span>
-                </DropdownMenuItem>
-              </DropdownMenuSubContent>
-            </DropdownMenuPortal>
-          </DropdownMenuSub>
-          <DropdownMenuItem>
-            <Plus className="mr-2 h-4 w-4" />
-            <span>New Team</span>
-            <DropdownMenuShortcut>⌘+T</DropdownMenuShortcut>
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          <Github className="mr-2 h-4 w-4" />
-          <span>GitHub</span>
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={() => {
-            handleLogin();
-          }}
-        >
-          <Cloud className="mr-2 h-4 w-4" />
-          <span>임시 로그인</span>
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={() => {
-            removeToken();
-          }}
-        >
-          <LifeBuoy className="mr-2 h-4 w-4" />
-          <span>임시 로그아웃</span>
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          <LogOut className="mr-2 h-4 w-4" />
-          <span>Log out</span>
-          <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
-        </DropdownMenuItem>
+        )}
+        {isLogin && (
+          <>
+            <DropdownMenuGroup>
+              <DropdownMenuItem>
+                <LayoutGrid className="mr-2 h-4 w-4" />
+                <span>호스트 홈</span>
+                <DropdownMenuShortcut>호스트</DropdownMenuShortcut>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <House className="mr-2 h-4 w-4" />
+                <span>내 숙소</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <CalendarDays className="mr-2 h-4 w-4" />
+                <span>일정</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <ChartNoAxesCombined className="mr-2 h-4 w-4" />
+                <span>통계</span>
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuGroup>
+              <DropdownMenuItem>
+                <BookOpenText className="mr-2 h-4 w-4" />
+                <span>예약 내역</span>
+                <DropdownMenuShortcut>공통</DropdownMenuShortcut>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <CakeSlice className="mr-2 h-4 w-4" />
+                <span>위시리스트</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <Star className="mr-2 h-4 w-4" />
+                <span>리뷰</span>
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              onClick={() => {
+                handleLogout();
+              }}
+            >
+              <LogOut className="mr-2 h-4 w-4" />
+              <span>로그아웃</span>
+            </DropdownMenuItem>
+          </>
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   );
