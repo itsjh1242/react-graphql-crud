@@ -53,14 +53,14 @@ export const HeaderCustomDropdown: React.FC<CustomHeaderCustomDropdownProps> = (
 
   const handleLogout = () => {
     removeToken();
-    navigate("/dayzen");
+    navigate("/");
     window.location.reload();
   };
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <div className="flex justify-center items-center border rounded-full px-4 py-2 gap-4 cursor-pointer">
+        <div className="flex justify-center items-center border rounded-full px-3 py-2 gap-4 cursor-pointer">
           <CustomAvatar imageUrl={user.user_profile_url} />
           <Menu />
         </div>
@@ -70,8 +70,8 @@ export const HeaderCustomDropdown: React.FC<CustomHeaderCustomDropdownProps> = (
           {isLogin ? (
             <div className="flex gap-2 w-full">
               <p className="w-2/3 truncate">{user.user_name}</p>
-              <Badge>
-                <p className="text-white">{user.user_role}</p>
+              <Badge variant="outline">
+                <p className="">{user.user_role}</p>
               </Badge>
             </div>
           ) : (
